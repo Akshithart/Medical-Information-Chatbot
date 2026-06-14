@@ -1,31 +1,69 @@
-async function askQuestion(){
+async function uploadPDF() {
 
-let question =
-document.getElementById(
-"question"
-).value;
+    const fileInput =
+        document.getElementById("pdfFile");
 
-let response =
-await fetch("/chat",{
+    if (!fileInput.files.length) {
 
-method:"POST",
+        alert("Please select a PDF");
 
-headers:{
-"Content-Type":
-"application/json"
-},
+        return;
+    }
 
-body:JSON.stringify({
-question:question
-})
+    const formData =
+        new FormData();
 
-});
+    formData.append(
+        "file",
+        fileInput.files[0]
+    );
 
-let data=
-await response.json();
+    const response =
+        await fetch("/upload", {
+            method: "POST",
+            body: formData
+        });
 
-document.getElementById(
-"answer"
-).innerHTML=
-data.answer;
+    const data =
+        await response.json();
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        data.message;
+
+    alert(data.message);
+}
+
+
+
+async function askQuestion() {
+
+    const question =
+        document.getElementById(
+            "question"
+        ).value;
+
+    const response =
+        await fetch("/chat", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+                question: question
+            })
+        });
+
+    const data =
+        await response.json();
+
+    document.getElementById(
+        "answer"
+    ).innerText =
+        data.answer;
 }

@@ -1,28 +1,34 @@
- 
+
 import pdfplumber
+
 
 def extract_text(pdf_path):
 
-    text=""
+    text = ""
 
     with pdfplumber.open(pdf_path) as pdf:
 
         for page in pdf.pages:
-            text += page.extract_text()
-            
+
+            page_text = page.extract_text()
+
+            if page_text:
+                text += page_text + "\n"
 
     return text
 
-def create_chunks(text,
-                  chunk_size=500):
 
-    chunks=[]
+def create_chunks(
+        text,
+        chunk_size=1000):
+
+    chunks = []
 
     for i in range(
-        0,
-        len(text),
-        chunk_size
-    ):
+            0,
+            len(text),
+            chunk_size):
+
         chunks.append(
             text[i:i+chunk_size]
         )

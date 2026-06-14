@@ -1,23 +1,25 @@
-from transformers import pipeline
+import google.generativeai as genai
+import os
 
-# Load FLAN-T5 model once during startup
-generator = pipeline(
-    task="text2text-generation",
-    model="google/flan-t5-small",
-    framework="pt"
+from dotenv import load_dotenv
+
+load_dotenv("secrets.env")
+
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
+model = genai.GenerativeModel(
+    "gemini-2.5-flash"
+)
+
+
 def generate_answer(question, context):
-    """
-    Generate answer using retrieved document context
-    """
 
     prompt = f"""
 You are a medical information assistant.
 
-Answer ONLY using the provided context.
-If the answer is not present in the context, say:
-"I could not find this information in the uploaded document."
+Answer ONLY from the provided context.
 
 Context:
 {context}
@@ -25,33 +27,17 @@ Context:
 Question:
 {question}
 
+Requirements:
+- Give a detailed answer.
+- Use bullet points when needed.
+- If information is unavailable, say:
+  'Information not found in uploaded document.'
+
 Answer:
 """
 
-    response = generator(
-        prompt,
-        max_length=256,
-        do_sample=False
+    response = model.generate_content(
+        prompt
     )
 
-    return response[0]["generated_text"].strip()
-
-
-# Testing
-if __name__ == "__main__":
-
-    sample_context = """
-    Diabetes symptoms include increased thirst,
-    frequent urination, fatigue,
-    blurred vision and weight loss.
-    """
-
-    sample_question = "What are the symptoms of diabetes?"
-
-    answer = generate_answer(
-        sample_question,
-        sample_context
-    )
-
-    print("\nAnswer:")
-    print(answer)
+    return response.text

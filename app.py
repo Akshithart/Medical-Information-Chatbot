@@ -1,101 +1,102 @@
- 
+from flask import Flask, request, render_template, jsonify
+import os
 
-from document_processor import extract_text , create_chunks
+from document_processor import extract_text, create_chunks
 from embedding_generator import create_embeddings
 from database import build_faiss_index, save_index
 from retriever import retrieve
-from medical_chatbot import generate_answer
-
-text = extract_text("sample.pdf")
-chunks=create_chunks(text)
-
-embeddings = create_embeddings(chunks)
-
-index = build_faiss_index(embeddings)
-
-save_index(index)
-
-print("FAISS index created successfully!")
-#print(type(embeddings))
-#print(embeddings.shape)
-
-from flask import Flask,request,render_template
-import os
+from medical_chatbot import generate_answer,load_dotenv
 
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+chunks = []
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
-@app.route("/uploads",methods=["POST"])
+
 @app.route("/upload", methods=["POST"])
 def upload():
 
     global chunks
 
     if "file" not in request.files:
-        return {"error": "No file uploaded"}
+        return jsonify({"error": "No file uploaded"})
 
     file = request.files["file"]
 
-    path = os.path.join(
+    filepath = os.path.join(
         UPLOAD_FOLDER,
         file.filename
     )
 
-    file.save(path)
+    file.save(filepath)
 
-    text = extract_text(path)
+    text = extract_text(filepath)
 
     chunks = create_chunks(text)
 
     embeddings = create_embeddings(chunks)
 
-    index = build_faiss_index(
-        embeddings
-    )
+    index = build_faiss_index(embeddings)
 
     save_index(index)
-    print("Total Chunks:",
-      len(chunks))
 
-    return {
-        "message":
-        "Document processed successfully"
-    }
-@app.route("/chat",methods=["POST"])
+    return jsonify({
+        "message": "Document processed successfully",
+        "chunks": len(chunks)
+    })
 
+
+'''@app.route("/chat", methods=["POST"])
 def chat():
 
-    question=request.json["question"]
+    global chunks
 
-    context=retrieve(
+    data = request.get_json()
+
+    question = data["question"]
+
+    context = retrieve(
         question,
         chunks
     )
-    print ("Question:",question)
-    print ("Context:",context)
-    answer=generate_answer(
+
+    answer = generate_answer(
         question,
         "\n".join(context)
     )
-    print("\n")
-    print("="*50)
-    print("QUESTION:", question)
-    print("="*50)
+    print("\n===== RETRIEVED CONTEXT =====")
+    print("\n".join(context))
+    print("=============================\n")
+    return jsonify({
+        "answer": answer,
+        "context": context
+    
+    })'''
 
-    print("\nCONTEXT:\n")
+@app.route("/chat", methods=["POST"])
+def chat():
 
-    for item in context:
-        print(item[:200])
+    question = request.json["question"]
 
-    print("="*50)   
+    context = retrieve(
+        question,
+        chunks
+    )
+
+    answer = generate_answer(
+        question,
+        "\n".join(context)
+    )
+
     return {
-        "answer":answer
+        "answer": answer
     }
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run(debug=True)

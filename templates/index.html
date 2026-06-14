@@ -1,28 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Medical Chatbot</title>
+    <title>Medical Information Chatbot</title>
 </head>
 <body>
 
-<h1>Medical Information Chatbot</h1>
+    <h1>Medical Information Chatbot</h1>
 
-
-<form id="uploadForm">
+    <!-- PDF Upload -->
     <input type="file" id="pdfFile">
-    <button type="submit">Upload</button>
-</form>
 
-<div id="status"></div>
-<input type="text"
-id="question">
+    <button onclick="uploadPDF()">
+        Upload PDF
+    </button>
 
-<button onclick="askQuestion()">
-Ask
-</button>
+    <div id="status"></div>
 
-<div id="answer"></div>
-<div id="chatbox"></div>
-<script src="/static/script.js"></script>
+    <hr>
+
+    <!-- Chat -->
+    <input
+        type="text"
+        id="question"
+        placeholder="Ask a medical question..."
+        style="width:400px;"
+    >
+
+    <button onclick="askQuestion()">
+        Ask
+    </button>
+
+    <br><br>
+
+    <div
+    id="answer"
+    style="
+        margin-top:20px;
+        padding:15px;
+        border:1px solid #ccc;
+        white-space:pre-wrap;
+        border-radius:10px;
+    ">
+</div>
+
+    <script src="/static/script.js"></script>
+
 </body>
 </html>
