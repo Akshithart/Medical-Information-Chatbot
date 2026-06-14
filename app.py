@@ -53,32 +53,6 @@ def upload():
     })
 
 
-'''@app.route("/chat", methods=["POST"])
-def chat():
-
-    global chunks
-
-    data = request.get_json()
-
-    question = data["question"]
-
-    context = retrieve(
-        question,
-        chunks
-    )
-
-    answer = generate_answer(
-        question,
-        "\n".join(context)
-    )
-    print("\n===== RETRIEVED CONTEXT =====")
-    print("\n".join(context))
-    print("=============================\n")
-    return jsonify({
-        "answer": answer,
-        "context": context
-    
-    })'''
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -89,16 +63,20 @@ def chat():
         question,
         chunks
     )
+    
 
     answer = generate_answer(
         question,
         "\n".join(context)
     )
-
-    return {
-        "answer": answer
-        
-    }
+    print("\n===== RETRIEVED CONTEXT =====")
+    print("\nRetrieved Context:")
+    print("\n".join(context))
+    print("=============================\n")
+    return jsonify ({
+        "answer": answer,
+        "context":context
+    })
 @app.route("/chatpage")
 def chatpage():
     return render_template(

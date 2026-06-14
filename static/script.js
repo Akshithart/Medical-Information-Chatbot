@@ -34,11 +34,13 @@ async function uploadPDF() {
     const data =
     await response.json();
 
-    document.getElementById(
-    "status"
-    ).innerText =
-    data.message;
+    if(data.context){
 
+    document.getElementById(
+        "context"
+    ).innerText =
+    data.context.join("\n\n");
+    }
     if(
         data.message
     ){
