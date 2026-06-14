@@ -1,17 +1,21 @@
 async function uploadPDF() {
 
     const fileInput =
-        document.getElementById("pdfFile");
+    document.getElementById(
+    "pdfFile"
+    );
 
-    if (!fileInput.files.length) {
-
-        alert("Please select a PDF");
-
+    if(
+        !fileInput.files.length
+    ){
+        alert(
+        "Select a PDF"
+        );
         return;
     }
 
     const formData =
-        new FormData();
+    new FormData();
 
     formData.append(
         "file",
@@ -19,51 +23,73 @@ async function uploadPDF() {
     );
 
     const response =
-        await fetch("/upload", {
-            method: "POST",
-            body: formData
-        });
+    await fetch(
+        "/upload",
+        {
+            method:"POST",
+            body:formData
+        }
+    );
 
     const data =
-        await response.json();
+    await response.json();
 
     document.getElementById(
-        "status"
+    "status"
     ).innerText =
-        data.message;
+    data.message;
 
-    alert(data.message);
+    if(
+        data.message
+    ){
+        setTimeout(
+            ()=>{
+                window.location.href=
+                "/chatpage";
+            },
+            1500
+        );
+    }
 }
 
 
 
-async function askQuestion() {
+async function askQuestion(){
 
     const question =
-        document.getElementById(
-            "question"
-        ).value;
+    document.getElementById(
+    "question"
+    ).value;
 
     const response =
-        await fetch("/chat", {
+    await fetch(
+        "/chat",
+        {
+            method:"POST",
 
-            method: "POST",
-
-            headers: {
+            headers:{
                 "Content-Type":
                 "application/json"
             },
 
-            body: JSON.stringify({
-                question: question
+            body:JSON.stringify({
+                question:question
             })
-        });
+        }
+    );
 
     const data =
-        await response.json();
+    await response.json();
 
     document.getElementById(
-        "answer"
+    "answer"
     ).innerText =
-        data.answer;
+    data.answer;
+
+    document.getElementById(
+    "context"
+    ).innerText =
+    data.context.join(
+    "\n\n"
+    );
 }

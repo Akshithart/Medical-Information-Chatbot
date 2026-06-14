@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medical Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <div class="left-panel">
+
+        <h2>📄 Document Status</h2>
+
+        <div class="info-card">
+            <p>✅ PDF Uploaded</p>
+            <p>✅ FAISS Indexed</p>
+            <p>✅ Gemini Connected</p>
+        </div>
+
+    </div>
+
+    <div class="right-panel">
+
+        <h2>🤖 Medical AI Assistant</h2>
+
+        <input
+            type="text"
+            id="question"
+            placeholder="Ask a medical question..."
+        >
+
+        <button onclick="askQuestion()">
+            Ask
+        </button>
+
+        <div class="result-card">
+
+            <h3>📄 Retrieved Context</h3>
+
+            <div id="context"></div>
+
+        </div>
+
+        <div class="result-card">
+
+            <h3>🤖 Generated Answer</h3>
+
+            <div id="answer"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/static/script.js"></script>
+
+</body>
+</html>
