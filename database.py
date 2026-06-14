@@ -25,3 +25,22 @@ def save_index(index):
         index,
         "vectorstore/faiss.index"
     )
+
+import sqlite3
+
+conn=sqlite3.connect(
+"database/medical.db"
+)
+
+cursor=conn.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS
+chat_history(
+id INTEGER PRIMARY KEY,
+question TEXT,
+answer TEXT
+)
+""")
+
+conn.commit()

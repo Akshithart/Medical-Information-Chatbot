@@ -1,4 +1,3 @@
- 
 import faiss
 from sentence_transformers import SentenceTransformer
 
@@ -6,26 +5,27 @@ model = SentenceTransformer(
     "all-MiniLM-L6-v2"
 )
 
-index = faiss.read_index(
-    "vectorstore/faiss.index"
-)
+def retrieve(query, chunks):
 
-def retrieve(query,chunks):
-
-    query_vector=model.encode(
-        [query]
+    index = faiss.read_index(
+        "vectorstore/faiss.index"
     )
 
-    D,I=index.search(
+    query_vector = model.encode([query])
+
+    D, I = index.search(
         query_vector,
         3
     )
 
-    result=[]
+    result = []
 
     for idx in I[0]:
-        result.append(
-            chunks[idx]
-        )
+
+        if idx < len(chunks):
+
+            result.append(
+                chunks[idx]
+            )
 
     return result
