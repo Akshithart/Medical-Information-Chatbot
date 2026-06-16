@@ -10,14 +10,32 @@
 
     <div class="left-panel">
 
-        <h2>📄 Document Status</h2>
+        
+        <h3>📂 Uploaded Documents</h3>
+
+<ul>
+{% for file in files %}
+    <li>📄 {{ file }}</li>
+{% endfor %}
+</ul>
 
         <div class="info-card">
             <p>✅ PDF Uploaded</p>
             <p>✅ FAISS Indexed</p>
             <p>✅ Gemini Connected</p>
         </div>
+        <div id="sidebar">
 
+    <h3>
+        Chat History
+    </h3>
+
+    <ul id="historyList">
+    </ul>
+    <button onclick="clearHistory()">
+🗑 Clear History
+</button>
+</div>
     </div>
 
     <div class="right-panel">
@@ -44,11 +62,29 @@
 
         <div class="result-card">
 
-            <h3>🤖 Generated Answer</h3>
+    <h3>🤖 Generated Answer</h3>
 
-            <div id="answer"></div>
+    <div
+        id="loader"
+        style="display:none"
+    >
+        ⏳ Generating response...
+    </div>
 
-        </div>
+    <div id="answer"></div>
+    <div id="answer"></div>
+
+    <button
+    id="downloadBtn"
+    onclick="downloadReport()"
+    style="display:none;margin-top:15px;"
+>
+    📥 Download Report
+</button>
+
+</div>
+
+</div>
 
     </div>
 

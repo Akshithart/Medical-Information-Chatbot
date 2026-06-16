@@ -1,25 +1,17 @@
-import google.generativeai as genai
-import os
+from transformers import pipeline
 
-from dotenv import load_dotenv
-
-load_dotenv("secrets.env")
-
-genai.configure(
-    api_key=os.getenv("GEMINI_API_KEY")
+generator = pipeline(
+    "text2text-generation",
+    model="google/flan-t5-base"
 )
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
-
-
-def generate_answer(question, context):
+def generate_answer(
+    question,
+    context
+):
 
     prompt = f"""
-You are a medical information assistant.
-
-Answer ONLY from the provided context.
+Answer the question using ONLY the context.
 
 Context:
 {context}
@@ -27,17 +19,15 @@ Context:
 Question:
 {question}
 
-Requirements:
-- Give a detailed answer.
-- Use bullet points when needed.
-- If information is unavailable, say:
-  'Information not found in uploaded document.'
-
 Answer:
 """
 
-    response = model.generate_content(
-        prompt
+    result = generator(
+        prompt,
+        max_new_tokens=200,
+        do_sample=False
     )
 
-    return response.text
+    return result[0][
+        "generated_text"
+    ]
