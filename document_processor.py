@@ -1,21 +1,48 @@
-
 import pdfplumber
+import os
 
 
-def extract_text(pdf_path):
+def extract_text(file_path):
 
-    text = ""
+    extension = os.path.splitext(
+        file_path
+    )[1].lower()
 
-    with pdfplumber.open(pdf_path) as pdf:
+    # PDF
+    if extension == ".pdf":
 
-        for page in pdf.pages:
+        text = ""
 
-            page_text = page.extract_text()
+        with pdfplumber.open(
+            file_path
+        ) as pdf:
 
-            if page_text:
-                text += page_text + "\n"
+            for page in pdf.pages:
 
-    return text
+                page_text = page.extract_text()
+
+                if page_text:
+
+                    text += (
+                        page_text +
+                        "\n"
+                    )
+
+        return text
+
+    # TXT
+    elif extension == ".txt":
+
+        with open(
+            file_path,
+            "r",
+            encoding="utf-8",
+            errors="ignore"
+        ) as file:
+
+            return file.read()
+
+    return ""
 
 
 def create_chunks(

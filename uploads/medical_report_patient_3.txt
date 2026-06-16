@@ -1,0 +1,56 @@
+CLINICAL MEDICAL REPORT
+--------------------------------------------------------------------------------
+HOSPITAL: Pacific Cascade Pulmonary & Sleep Clinic
+TELEPHONE: (555) 017-4422
+CONFIDENTIALITY: Protected Health Information (PHI)
+--------------------------------------------------------------------------------
+
+PATIENT INFORMATION:
+Patient Name   : Liam O'Connor
+Record Number  : MRN-88319-L
+Date of Birth  : July 19, 1982
+Age / Gender   : 43 / Male
+Date of Visit  : June 12, 2026
+Attending MD   : Dr. Fiona Gallagher, MD (Pulmonary Medicine)
+
+CHIEF COMPLAINT:
+Progressive exertional wheezing, chronic productive cough lasting over 8 weeks, 
+and chest tightness, particularly aggravated by night-time shifts and cold air exposure.
+
+HISTORY OF PRESENT ILLNESS (HPI):
+Mr. O'Connor is a 43-year-old male, non-smoker, working as an industrial warehouse 
+supervisor. He reports a long-standing history of seasonal allergies that has 
+evolved over the last year into recurrent episodes of severe shortness of breath. 
+He notes using over-the-counter rescue inhalers up to 4-5 times a week, with temporary 
+relief. Symptoms are notably worse between 2:00 AM and 5:00 AM, frequently resulting 
+in nocturnal awakenings.
+
+PHYSICAL EXAMINATION:
+- Vital Signs: BP: 122/78 mmHg | HR: 82 bpm | Temp: 98.6 deg F | RR: 20 bpm | SpO2: 94% on room air.
+- Respiratory: Prolonged expiratory phase with diffuse, high-pitched expiratory wheezing heard across all lung fields bilaterally. Clear accessory muscle use during deep inspiration.
+- ENT: Boggy, pale nasal turbinates consistent with active allergic rhinitis. No sinus tenderness.
+- Cardiovascular: Regular rhythm, normal S1/S2 without gallops or rubs.
+
+DIAGNOSTIC TESTING (SPIROMETRY & PULMONARY FUNCTION):
+- Pre-Bronchodilator FEV1: 2.15 L (62% of predicted value)
+- Pre-Bronchodilator FEV1/FVC Ratio: 64% (Indicative of obstructive defect)
+- Post-Bronchodilator FEV1: 2.58 L (An increase of 20% and +430mL in volume)
+- Clinical Interpretation: Highly significant and positive bronchodilator reversibility, confirming hyper-reactive airway disease.
+
+ASSESSMENT & DIAGNOSIS:
+1. Moderate Persistent Asthma (ICD-10: J45.40) - Uncontrolled on current lifestyle.
+2. Chronic Allergic Rhinitis (ICD-10: J30.9) - Exacerbating airway reactivity.
+
+MANAGEMENT & ACTION PLAN:
+1. Maintenance Pharmacotherapy: Initiate Fluticasone propionate/Salmeterol (Advair Diskus 250/50 mcg), 1 inhalation orally twice daily. Emphasize strict compliance regardless of active symptoms.
+2. Rescue Pharmacotherapy: Prescribe Albuterol Sulfate HFA inhaler, 90 mcg, 2 puffs orally every 4-6 hours as needed for acute bronchospasm/wheezing.
+3. Allergy Control: Initiate Cetirizine 10 mg orally once daily at bedtime and Fluticasone propionate nasal spray, 2 sprays in each nostril daily.
+4. Patient Education: Provided written Asthma Action Plan. Educated on peak flow monitoring and trigger avoidance (dust mites, industrial particulates).
+5. Follow-up: Re-evaluate in clinic in 4 weeks to check therapeutic response, compliance, and repeat spirometry.
+
+--------------------------------------------------------------------------------
+ELECTRONICALLY SIGNED BY:
+Dr. Fiona Gallagher, MD
+License No: #MD-90231-FG
+Department of Pulmonary Medicine
+--------------------------------------------------------------------------------

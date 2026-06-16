@@ -65,10 +65,20 @@ def upload():
         if file.filename == "":
             continue
 
-        filepath = os.path.join(
-            UPLOAD_FOLDER,
+        extension = os.path.splitext(
             file.filename
-        )
+        )[1].lower()
+
+        if extension not in [
+        ".pdf",
+        ".txt"
+        ]:
+            continue
+
+        filepath = os.path.join(
+        UPLOAD_FOLDER,
+        file.filename
+    )
 
         file.save(filepath)
 
@@ -198,7 +208,7 @@ def chat():
 
         response_data = {
     "answer": answer,
-    "context": context_text[:500] + "..."
+    "context": context_text[:] + "..."
 }
 
         cache[question] = response_data
