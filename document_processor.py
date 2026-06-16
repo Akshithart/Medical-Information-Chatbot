@@ -20,7 +20,7 @@ def extract_text(pdf_path):
 
 def create_chunks(
         text,
-        chunk_size=1000):
+        chunk_size=1500):
 
     chunks = []
 

@@ -20,15 +20,25 @@
 </ul>
 
         <div class="info-card">
-            <p>✅ PDF Uploaded</p>
-            <p>✅ FAISS Indexed</p>
-            <p>✅ Gemini Connected</p>
-        </div>
+
+    {% if pdf_uploaded %}
+        <p>✅ PDF Uploaded</p>
+    {% else %}
+        <p>❌ PDF Uploaded</p>
+    {% endif %}
+
+    {% if faiss_ready %}
+        <p>✅ FAISS Indexed</p>
+    {% else %}
+        <p>❌ FAISS Indexed</p>
+    {% endif %}
+
+    <p>✅ LLM Connected</p>
+
+</div>
         <div id="sidebar">
 
-    <h3>
-        Chat History
-    </h3>
+    <h3>🕘 Chat History</h3>
 
     <ul id="historyList">
     </ul>
@@ -54,10 +64,15 @@
 
         <div class="result-card">
 
-            <h3>📄 Retrieved Context</h3>
+            <details>
 
-            <pre id="context"></pre>
+    <summary><h3>
+        📄 Retrieved Context</h3>
+    </summary>
 
+    <pre id="context"></pre>
+
+</details>
         </div>
 
         <div class="result-card">
@@ -72,15 +87,13 @@
     </div>
 
     <div id="answer"></div>
-    <div id="answer"></div>
-
-    <button
-    id="downloadBtn"
-    onclick="downloadReport()"
-    style="display:none;margin-top:15px;"
->
-    📥 Download Report
-</button>
+        </div>
+   <button
+        id="downloadBtn"
+        onclick="downloadReport()"
+    >
+        📥 Download Report
+    </button>
 
 </div>
 

@@ -121,7 +121,7 @@ def upload():
 def chat():
 
     global chunks
-
+    
     question = request.json.get(
         "question",
         ""
@@ -131,7 +131,13 @@ def chat():
         return jsonify({
             "error": "Question cannot be empty"
         }), 400
+    
+    if len(question.split()) < 3:
 
+        question = (
+        "What does the medical report say about "
+        + question + "?"
+    )
     # CACHE CHECK
     if question in cache:
 
@@ -185,9 +191,9 @@ def chat():
         )
 
         response_data = {
-            "answer": answer,
-            "context": context_text
-        }
+    "answer": answer,
+    "context": context_text[:500] + "..."
+}
 
         cache[question] = response_data
 
@@ -209,10 +215,16 @@ def chat():
 @app.route("/chatpage")
 def chatpage():
 
+    pdf_uploaded = len(uploaded_files) > 0
+
+    faiss_ready = len(chunks) > 0
+
     return render_template(
         "chat.html",
         filename=current_filename,
-        files=uploaded_files
+        files=uploaded_files,
+        pdf_uploaded=pdf_uploaded,
+        faiss_ready=faiss_ready
     )
 
 @app.route("/download-report", methods=["POST"])
@@ -332,27 +344,6 @@ def clear_history():
     return jsonify({
         "message":"History cleared"
     })
-
-@app.route("/testdb")
-def testdb():
-
-    import sqlite3
-    conn = get_connection()
-    conn = sqlite3.connect(
-        "medical_chatbot.db"
-    )
-
-    cursor = conn.cursor()
-
-    cursor.execute(
-        "SELECT * FROM chat_history"
-    )
-
-    data = cursor.fetchall()
-
-    conn.close()
-
-    return jsonify(data)
 
 if __name__ == "__main__":
     app.run(debug=True)

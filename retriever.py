@@ -24,7 +24,7 @@ def retrieve(
 
     D, I = index.search(
         query_embedding,
-        3
+        2
     )
 
     results = []

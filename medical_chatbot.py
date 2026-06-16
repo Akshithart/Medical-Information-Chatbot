@@ -11,7 +11,15 @@ def generate_answer(
 ):
 
     prompt = f"""
-Answer the question using ONLY the context.
+You are a medical assistant.
+
+Answer ONLY the question.
+
+Rules:
+- Maximum 2 sentences.
+- Maximum 40 words.
+- Do not repeat the context.
+- Give only the final answer.
 
 Context:
 {context}
@@ -24,10 +32,8 @@ Answer:
 
     result = generator(
         prompt,
-        max_new_tokens=200,
+        max_new_tokens=50,
         do_sample=False
     )
 
-    return result[0][
-        "generated_text"
-    ]
+    return result[0]["generated_text"]
