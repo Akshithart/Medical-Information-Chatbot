@@ -14,7 +14,7 @@ from reportlab.platypus import (
 from database import (
     create_tables,
     save_chat,
-    get_history
+    get_history,get_connection
 )
 
 from reportlab.lib.styles import getSampleStyleSheet
@@ -332,6 +332,27 @@ def clear_history():
     return jsonify({
         "message":"History cleared"
     })
+
+@app.route("/testdb")
+def testdb():
+
+    import sqlite3
+    conn = get_connection()
+    conn = sqlite3.connect(
+        "medical_chatbot.db"
+    )
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM chat_history"
+    )
+
+    data = cursor.fetchall()
+
+    conn.close()
+
+    return jsonify(data)
 
 if __name__ == "__main__":
     app.run(debug=True)
