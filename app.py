@@ -11,6 +11,7 @@ from reportlab.platypus import (
     Paragraph,
     Spacer
 )
+from nlp_processor import detect_intent
 from database import (
     create_tables,
     save_chat,
@@ -20,6 +21,8 @@ from database import (
 from reportlab.lib.styles import getSampleStyleSheet
 create_tables()
 app = Flask(__name__)
+
+
 
 cache = {}
 UPLOAD_FOLDER = "uploads"
@@ -126,7 +129,15 @@ def chat():
         "question",
         ""
     ).strip()
+    
+    intent = detect_intent(
+    question
+)
 
+    print(
+    "Intent:",
+    intent
+    )
     if not question:
         return jsonify({
             "error": "Question cannot be empty"

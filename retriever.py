@@ -2,6 +2,7 @@
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from nlp_processor import preprocess_query
 
 model = SentenceTransformer(
     "all-MiniLM-L6-v2"
@@ -17,11 +18,13 @@ def retrieve(
 
     
 
-    query_embedding = model.encode(
-        [query]
-    )
-    query_embedding=np.array(query_embedding).astype("float32")
+    query = preprocess_query(
+    query
+)
 
+    query_embedding = model.encode(
+    [query]
+)
     D, I = index.search(
         query_embedding,
         2

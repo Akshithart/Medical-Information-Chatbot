@@ -32,7 +32,7 @@ Answer:
 
     result = generator(
         prompt,
-        max_new_tokens=50,
+        max_new_tokens=100,
         do_sample=False
     )
 
