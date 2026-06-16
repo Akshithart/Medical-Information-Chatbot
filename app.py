@@ -132,12 +132,7 @@ def chat():
             "error": "Question cannot be empty"
         }), 400
     
-    if len(question.split()) < 3:
-
-        question = (
-        "What does the medical report say about "
-        + question + "?"
-    )
+    
     # CACHE CHECK
     if question in cache:
 
