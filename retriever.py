@@ -16,8 +16,6 @@ def retrieve(
         query,
         chunks):
 
-    
-
     query = preprocess_query(
     query
 )
@@ -29,7 +27,15 @@ def retrieve(
         query_embedding,
         2
     )
+    print(
+    "Distances:",
+    D
+)
 
+    print(
+    "Indexes:",
+    I
+)
     results = []
 
     for idx in I[0]:

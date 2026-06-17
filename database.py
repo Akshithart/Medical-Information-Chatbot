@@ -21,7 +21,17 @@ def build_faiss_index(
 
 
 def save_index(index):
+    
 
+    index = faiss.read_index(
+    "vectorstore/faiss.index"
+)
+
+    print(
+    "Total vectors:",
+    index.ntotal
+)
+    print ("Dimension:",index.d)
     faiss.write_index(
         index,
         "vectorstore/faiss.index"

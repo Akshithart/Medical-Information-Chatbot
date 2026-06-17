@@ -11,5 +11,5 @@ def create_embeddings(chunks):
         chunks,
         convert_to_numpy=True
     )
-
+    print (embeddings[0])
     return embeddings

@@ -85,7 +85,7 @@ def upload():
 
     retriever.index = index
     current_filename = ", ".join(uploaded_files)
-
+    print (chunks[:5])
     return jsonify({
         "message": "Documents processed successfully",
         "files": uploaded_files,
@@ -143,7 +143,7 @@ def chat():
 
         response_data = {
             "answer": answer,
-            "context": context_text[:] + "..."
+            "context": context_text[:600] + "..."
         }
 
         cache[question] = response_data
@@ -252,6 +252,25 @@ def clear_history():
     conn.close()
 
     return jsonify({"message":"History cleared"})
+
+@app.route("/faiss-info")
+def faiss_info():
+
+    import faiss
+
+    index = faiss.read_index(
+        "vectorstore/faiss.index"
+    )
+
+    return jsonify({
+
+        "total_vectors":
+        index.ntotal,
+
+        "dimension":
+        index.d
+    })
+
 
 if __name__ == "__main__":
     app.run(debug=True)
