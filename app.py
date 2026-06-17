@@ -1,28 +1,18 @@
 from flask import Flask, request, render_template, jsonify
-import os
-
 from document_processor import extract_text, create_chunks
 from embedding_generator import create_embeddings
 from database import build_faiss_index, save_index
 from retriever import retrieve
 from medical_chatbot import generate_answer
-from reportlab.platypus import (
-    SimpleDocTemplate,
-    Paragraph,
-    Spacer
-)
+from reportlab.platypus import (SimpleDocTemplate,Paragraph,Spacer)
 from nlp_processor import detect_intent
-from database import (
-    create_tables,
-    save_chat,
-    get_history,get_connection
-)
-
+from database import (create_tables,save_chat,get_history)
 from reportlab.lib.styles import getSampleStyleSheet
-create_tables()
+import os
+
+
 app = Flask(__name__)
-
-
+create_tables()
 
 cache = {}
 UPLOAD_FOLDER = "uploads"
@@ -46,16 +36,12 @@ def upload():
     global current_filename
 
     if "files" not in request.files:
-        return jsonify({
-            "error": "No files uploaded"
-        }), 400
+        return jsonify({"error": "No files uploaded"}), 400
 
     files = request.files.getlist("files")
 
     if len(files) == 0:
-        return jsonify({
-            "error": "No files selected"
-        }), 400
+        return jsonify({"error": "No files selected"}), 400
 
     all_chunks = []
     uploaded_files = []
@@ -65,64 +51,40 @@ def upload():
         if file.filename == "":
             continue
 
-        extension = os.path.splitext(
-            file.filename
-        )[1].lower()
+        extension = os.path.splitext(file.filename)[1].lower()
 
-        if extension not in [
-        ".pdf",
-        ".txt"
-        ]:
+        if extension not in [".pdf",".txt"]:
             continue
 
-        filepath = os.path.join(
-        UPLOAD_FOLDER,
-        file.filename
-    )
+        filepath = os.path.join(UPLOAD_FOLDER,file.filename)
 
         file.save(filepath)
 
-        uploaded_files.append(
-            file.filename
-        )
+        uploaded_files.append(file.filename)
 
-        text = extract_text(
-            filepath
-        )
+        text = extract_text(filepath)
 
         if len(text.strip()) == 0:
             continue
 
-        file_chunks = create_chunks(
-            text
-        )
+        file_chunks = create_chunks(text)
 
-        all_chunks.extend(
-            file_chunks
-        )
+        all_chunks.extend(file_chunks)
 
     if len(all_chunks) == 0:
-        return jsonify({
-            "error": "No readable content found"
-        }), 400
+        return jsonify({"error": "No readable content found"}), 400
 
     chunks = all_chunks
 
-    embeddings = create_embeddings(
-        chunks
-    )
+    embeddings = create_embeddings(chunks)
 
-    index = build_faiss_index(
-        embeddings
-    )
+    index = build_faiss_index(embeddings)
 
     save_index(index)
     import retriever
 
     retriever.index = index
-    current_filename = ", ".join(
-        uploaded_files
-    )
+    current_filename = ", ".join(uploaded_files)
 
     return jsonify({
         "message": "Documents processed successfully",
@@ -135,23 +97,14 @@ def chat():
 
     global chunks
     
-    question = request.json.get(
-        "question",
-        ""
-    ).strip()
+    question = request.json.get("question","").strip()
     
-    intent = detect_intent(
-    question
-)
+    intent = detect_intent(question)
 
-    print(
-    "Intent:",
-    intent
-    )
+    print("Intent:",intent)
+
     if not question:
-        return jsonify({
-            "error": "Question cannot be empty"
-        }), 400
+        return jsonify({"error": "Question cannot be empty"}), 400
     
     
     # CACHE CHECK
@@ -159,15 +112,9 @@ def chat():
 
         cached_response = cache[question]
 
-        save_chat(
-            question,
-            cached_response["context"],
-            cached_response["answer"]
-        )
+        save_chat(question,cached_response["context"],cached_response["answer"])
 
-        return jsonify(
-            cached_response
-        )
+        return jsonify(cached_response)
 
     # DOCUMENT CHECK
     if not chunks:
@@ -177,10 +124,7 @@ def chat():
             "context": ""
         })
 
-    context = retrieve(
-        question,
-        chunks
-    )
+    context = retrieve(question,chunks)
 
     if len(context) == 0:
         return jsonify({
@@ -189,33 +133,22 @@ def chat():
             "context": ""
         })
 
-    context_text = "\n\n".join(
-        context
-    )
+    context_text = "\n\n".join(context)
 
     try:
 
-        answer = generate_answer(
-            question,
-            context_text
-        )
+        answer = generate_answer(question,context_text)
 
-        save_chat(
-            question,
-            context_text,
-            answer
-        )
+        save_chat(question,context_text,answer)
 
         response_data = {
-    "answer": answer,
-    "context": context_text[:] + "..."
-}
+            "answer": answer,
+            "context": context_text[:] + "..."
+        }
 
         cache[question] = response_data
 
-        return jsonify(
-            response_data
-        )
+        return jsonify(response_data)
 
     except Exception as e:
 
@@ -260,55 +193,25 @@ def download_report():
 
     content = []
 
-    content.append(
-        Paragraph(
-            "Medical Information Chatbot Report",
-            styles["Title"]
-        )
-    )
+    content.append(Paragraph("Medical Information Chatbot Report",styles["Title"]))
 
-    content.append(
-        Spacer(1, 20)
-    )
+    content.append(Spacer(1, 20))
 
-    content.append(
-        Paragraph(
-            f"<b>Question:</b> {question}",
-            styles["BodyText"]
-        )
-    )
+    content.append(Paragraph(f"<b>Question:</b> {question}",styles["BodyText"]))
 
-    content.append(
-        Spacer(1,10)
-    )
+    content.append(Spacer(1,10))
 
-    content.append(
-        Paragraph(
-            f"<b>Retrieved Context:</b><br/>{context}",
-            styles["BodyText"]
-        )
-    )
+    content.append(Paragraph(f"<b>Retrieved Context:</b><br/>{context}",styles["BodyText"]))
 
-    content.append(
-        Spacer(1,10)
-    )
+    content.append(Spacer(1,10))
 
-    content.append(
-        Paragraph(
-            f"<b>Generated Answer:</b><br/>{answer}",
-            styles["BodyText"]
-        )
-    )
+    content.append(Paragraph(f"<b>Generated Answer:</b><br/>{answer}",styles["BodyText"]))
 
     doc.build(content)
 
-    return jsonify({
-        "pdf": "/static/report.pdf"
-    })
+    return jsonify({"pdf": "/static/report.pdf"})
 
-@app.route(
-    "/history",
-    methods=["GET"]
+@app.route("/history",methods=["GET"]
 )
 def history():
 
@@ -332,34 +235,23 @@ def history():
 
         })
 
-    return jsonify(
-        result
-    )
+    return jsonify(result)
 
-@app.route(
-    "/clear-history",
-    methods=["POST"]
-)
+@app.route("/clear-history",methods=["POST"])
 def clear_history():
 
     import sqlite3
 
-    conn = sqlite3.connect(
-        "medical_chatbot.db"
-    )
+    conn = sqlite3.connect("medical_chatbot.db")
 
     cursor = conn.cursor()
 
-    cursor.execute(
-        "DELETE FROM chat_history"
-    )
+    cursor.execute("DELETE FROM chat_history")
 
     conn.commit()
     conn.close()
 
-    return jsonify({
-        "message":"History cleared"
-    })
+    return jsonify({"message":"History cleared"})
 
 if __name__ == "__main__":
     app.run(debug=True)
